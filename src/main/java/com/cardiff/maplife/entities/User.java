@@ -48,6 +48,23 @@ public class User {
     @Column(name = "icon")
     private String icon;
 
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
+    }
+
+    private boolean registered;
+
+
+
+
+
+    public boolean isRegistered()
+    {
+        return this.registered;
+
+    }
+
+
     public Long getId() {
         return id;
     }

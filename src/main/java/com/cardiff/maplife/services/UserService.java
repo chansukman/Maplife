@@ -9,6 +9,21 @@ import java.util.Set;
 
 @Service
 public class UserService {
+
+    private User currentUser;
+
+    //this is not the best way to get the current user, but was sufficient for displaying our MVP to the client
+    public void setCurrentUser(User user){
+        this.currentUser = user;
+    }
+
+    //gets the currently logged-in user
+    public User getCurrentUser(){
+        return currentUser;
+    }
+
+
+
     public UserRepository userRepository;
     public UserService(UserRepository userRepository){
         this.userRepository=userRepository;
@@ -39,6 +54,9 @@ public class UserService {
         return null;
     }
 }
+
+
+
 
 
 
