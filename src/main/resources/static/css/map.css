@@ -7,14 +7,34 @@ body{
 #map {
     height: calc(100vh - 50px);
 }
-.custom-div-icon{
-    height: 50px !important;
-    width: 50px !important;
+.marker-icon{
     border-radius: 50%;
+    height: 54px !important;
+    width: 54px !important;
+    box-shadow: 0 0px 8px rgb(0 0 0 / 40%);
+}
+.nowIcon{
+    animation: shine 2s infinite linear;
+    border: 4px solid transparent;
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+    background-image: linear-gradient(0deg, #f59a23, #C719EC), linear-gradient(0deg, #f59a23, #C719EC);
+}
+@keyframes shine {
+    0% {transform: rotate(0deg);transform-origin: center center;}
+    100% { transform: rotate(360deg);transform-origin: center center;}
+}
+.custom-div-now-icon{
+    animation: shine 2s infinite linear reverse;
+}
+
+.custom-div-upcoming-icon{
+    border: 4px solid white;
 }
 #custom-div-icon{
-    border: 2px solid white;
-    box-shadow: 0 0px 8px rgb(0 0 0 / 40%);
+    border-radius: 50%;
+    height: 100% !important;
+    width: 100% !important;
 }
 .leaflet-popup-content{
     width: 200px !important;

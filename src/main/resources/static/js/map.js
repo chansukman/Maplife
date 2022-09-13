@@ -1,4 +1,3 @@
-let popupContent
 let currentLocation
 let followingUserId=[]
 const categoryElements= document.getElementsByName('cat-group-chips')
@@ -28,7 +27,7 @@ var displayCurrentLocation = L.control.locate({
     keepCurrentZoomLevel:true,
     setView:'untilPanOrZoom',
     clickBehavior:{inView: 'setView', outOfView: 'setView', inViewNotFollowing: 'inView'},
-    flyTo:true,
+    flyTo:false,
     icon:'relocate',
 }).addTo(map);
 displayCurrentLocation.start({setView:false}) //load location as soon as load the page
@@ -65,8 +64,6 @@ mcgLayerSupportGroup.addTo(map);
 //retrieve and show the streaming event data
 const getEvents = async function () {
     if (headerButtonLogged.style.display==="flex"){
-
-
         const response1 = await fetch("/api/getFollowingUserId")
         if (response1.status == "200"){
             followingUserId = await response1.json();
@@ -78,24 +75,30 @@ const getEvents = async function () {
         const data = await response.json();
         console.log(data);
         let roomLink;
+        //define the custom icon for hosts
+        let upcomingIcon = L.divIcon({className:'NONE',iconAnchor: [25, 25],popupAnchor: [2, -28]});
+        let nowIcon = L.divIcon({className:'NONE',iconAnchor: [25, 25],popupAnchor: [2, -28]});
+        let popupContent;
         //resolve data and put them in our marker and popup
         for (let i = 0;data.length>i;i++) {
+            let time = strToDate(data[i].event_date)
+            let marker = L.marker();
             if (data[i].live===true){
                 roomLink = "/live?room="+ data[i].title
+                //custom the popup and icon for hosts
+                popupContent = `<a href="${roomLink}"><div id="event-img-container" style="background-image: url('../../../${data[i].photosImagePath}')"></div><div id="event-title">${data[i].title}</div>
+                            <div id="host-name" class="event-text">${data[i].user.username}</div><div id="event-viewers" class="event-text">${data[i].user.views} viewers</div><div class="event-text">${time}</div></a>`
+                nowIcon.options.html = `<div class="nowIcon marker-icon"><img id="custom-div-icon" class="custom-div-now-icon" src= "image/${data[i].user.icon}"></div>`
+                marker = L.marker([data[i].latitude,data[i].longitude], {icon: nowIcon}).bindPopup(popupContent,{closeButton:false})
             }
-
             else if (data[i].live===false){
                 roomLink = "/profile/"+ data[i].user.username
-            }
-
-            let time = strToDate(data[i].event_date)
-            //define the custom icon for hosts
-            let myIcon = L.divIcon({className:'custom-div-icon',iconAnchor: [25, 25],popupAnchor: [2, -28]});
-            //custom the popup and icon for hosts
-            popupContent = `<a href="${roomLink}"><div id="event-img-container" style="background-image: url('../../../${data[i].photosImagePath}')"></div><div id="event-title">${data[i].title}</div>
+                //custom the popup and icon for hosts
+                popupContent = `<a href="${roomLink}"><div id="event-img-container" style="background-image: url('../../../${data[i].photosImagePath}')"></div><div id="event-title">${data[i].title}</div>
                             <div id="host-name" class="event-text">${data[i].user.username}</div><div id="event-viewers" class="event-text">${data[i].user.views} viewers</div><div class="event-text">${time}</div></a>`
-            myIcon.options.html = `<img id="custom-div-icon" class="custom-div-icon" src= "image/${data[i].user.icon}">`
-            const marker = L.marker([data[i].latitude,data[i].longitude], {icon: myIcon}).bindPopup(popupContent,{closeButton:false})
+                upcomingIcon.options.html = `<div class="upcomingIcon marker-icon"><img id="custom-div-icon" class="custom-div-upcoming-icon" src= "image/${data[i].user.icon}"></div>`
+                marker = L.marker([data[i].latitude,data[i].longitude], {icon: upcomingIcon}).bindPopup(popupContent,{closeButton:false})
+            }
             let category =  data[i].cat.split(",");
             console.log(data[i].title,category)
             //add unfollowed hosts' events to a group
@@ -135,22 +138,22 @@ const getEvents = async function () {
 }
 
 //show mock data
-let mockData = []
-for (let i=0;i<50;i++){
-    let dummyItem = {'host_name':'Cat Lover','event_title':'My life with cats','event_description':'','event_cover':'cat.png','event_viewer':'1000','host_icon':'cat.png','category':'Pet',lat:48.8 + 0.1 * Math.random(),lng:2.25 + 0.2 * Math.random()}
-    let dummyItem2 = {'host_name':'Bird life','event_title':'Do you know these birds?','event_description':'','event_cover':'birds.jpg','event_viewer':'1000','host_icon':'birds.jpg','category':'Pet',lat:48.8 + 0.1 * Math.random(),lng:2.25 + 0.2 * Math.random()}
-    mockData.push(dummyItem,dummyItem2)
-}
-for (let i = 0;mockData.length>i;i++) {
-    let mockIcon = L.divIcon({className:'custom-div-icon',iconAnchor: [25, 25],popupAnchor: [2, -28]});
-    let mockEventCoverImg = "image/" + mockData[i].event_cover
-    let mockEventIconImg = "image/" + mockData[i].host_icon
-    mockPopupContent = `<div id="event-img-container" style="background-image: url(${mockEventCoverImg})"></div><div id="event-title">${mockData[i].event_title}</div>
-<div id="host-name" class="event-text">${mockData[i].host_name}</div><div id="event-viewers" class="event-text">${mockData[i].event_viewer} viewers</div><div class="event-text">47 minutes ago</div>`
-    mockIcon.options.html = `<img id="custom-div-icon" class="custom-div-icon" src= ${mockEventIconImg}>`
-    // determine the category and put them into different layer groups
-        L.marker([mockData[i].lat,mockData[i].lng], {icon: mockIcon}).bindPopup(mockPopupContent,{closeButton:false}).addTo(otherGroup) ;
-}
+// let mockData = []
+// for (let i=0;i<50;i++){
+//     let dummyItem = {'host_name':'Cat Lover','event_title':'My life with cats','event_description':'','event_cover':'cat.png','event_viewer':'1000','host_icon':'cat.png','category':'Pet',lat:48.8 + 0.1 * Math.random(),lng:2.25 + 0.2 * Math.random()}
+//     let dummyItem2 = {'host_name':'Bird life','event_title':'Do you know these birds?','event_description':'','event_cover':'birds.jpg','event_viewer':'1000','host_icon':'birds.jpg','category':'Pet',lat:48.8 + 0.1 * Math.random(),lng:2.25 + 0.2 * Math.random()}
+//     mockData.push(dummyItem,dummyItem2)
+// }
+// for (let i = 0;mockData.length>i;i++) {
+//     let mockIcon = L.divIcon({className:'custom-div-icon',iconAnchor: [25, 25],popupAnchor: [2, -28]});
+//     let mockEventCoverImg = "image/" + mockData[i].event_cover
+//     let mockEventIconImg = "image/" + mockData[i].host_icon
+//     mockPopupContent = `<div id="event-img-container" style="background-image: url(${mockEventCoverImg})"></div><div id="event-title">${mockData[i].event_title}</div>
+// <div id="host-name" class="event-text">${mockData[i].host_name}</div><div id="event-viewers" class="event-text">${mockData[i].event_viewer} viewers</div><div class="event-text">47 minutes ago</div>`
+//     mockIcon.options.html = `<img id="custom-div-icon" class="custom-div-icon" src= ${mockEventIconImg}>`
+//     // determine the category and put them into different layer groups
+//         L.marker([mockData[i].lat,mockData[i].lng], {icon: mockIcon}).bindPopup(mockPopupContent,{closeButton:false}).addTo(otherGroup) ;
+// }
 
 var filterSidebar = L.control.sidebar('filter-sidebar', {
     position: 'left',
@@ -300,7 +303,7 @@ setInterval(() => {
     upcomingGroup.clearLayers()
     unfollowingGroup.clearLayers()
     mcgLayerSupportGroup.clearLayers()
-    getEvents().then(showEventsOnMap)},30000)
+    getEvents().then(showEventsOnMap)},300000)
 
 /* EventListeners */
 resetButtonElement.addEventListener("click",clearAll)
