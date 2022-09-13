@@ -1,4 +1,3 @@
-let popupContent
 let currentLocation
 let followingUserId=[]
 const categoryElements= document.getElementsByName('cat-group-chips')
@@ -28,7 +27,7 @@ var displayCurrentLocation = L.control.locate({
     keepCurrentZoomLevel:true,
     setView:'untilPanOrZoom',
     clickBehavior:{inView: 'setView', outOfView: 'setView', inViewNotFollowing: 'inView'},
-    flyTo:true,
+    flyTo:false,
     icon:'relocate',
 }).addTo(map);
 displayCurrentLocation.start({setView:false}) //load location as soon as load the page
@@ -79,20 +78,24 @@ const getEvents = async function () {
         //define the custom icon for hosts
         let upcomingIcon = L.divIcon({className:'NONE',iconAnchor: [25, 25],popupAnchor: [2, -28]});
         let nowIcon = L.divIcon({className:'NONE',iconAnchor: [25, 25],popupAnchor: [2, -28]});
+        let popupContent;
         //resolve data and put them in our marker and popup
         for (let i = 0;data.length>i;i++) {
             let time = strToDate(data[i].event_date)
-            //custom the popup and icon for hosts
-            popupContent = `<a href="${roomLink}"><div id="event-img-container" style="background-image: url('../../../${data[i].photosImagePath}')"></div><div id="event-title">${data[i].title}</div>
-                            <div id="host-name" class="event-text">${data[i].user.username}</div><div id="event-viewers" class="event-text">${data[i].user.views} viewers</div><div class="event-text">${time}</div></a>`
             let marker = L.marker();
             if (data[i].live===true){
                 roomLink = "/live?room="+ data[i].title
+                //custom the popup and icon for hosts
+                popupContent = `<a href="${roomLink}"><div id="event-img-container" style="background-image: url('../../../${data[i].photosImagePath}')"></div><div id="event-title">${data[i].title}</div>
+                            <div id="host-name" class="event-text">${data[i].user.username}</div><div id="event-viewers" class="event-text">${data[i].user.views} viewers</div><div class="event-text">${time}</div></a>`
                 nowIcon.options.html = `<div class="nowIcon marker-icon"><img id="custom-div-icon" class="custom-div-now-icon" src= "image/${data[i].user.icon}"></div>`
                 marker = L.marker([data[i].latitude,data[i].longitude], {icon: nowIcon}).bindPopup(popupContent,{closeButton:false})
             }
             else if (data[i].live===false){
                 roomLink = "/profile/"+ data[i].user.username
+                //custom the popup and icon for hosts
+                popupContent = `<a href="${roomLink}"><div id="event-img-container" style="background-image: url('../../../${data[i].photosImagePath}')"></div><div id="event-title">${data[i].title}</div>
+                            <div id="host-name" class="event-text">${data[i].user.username}</div><div id="event-viewers" class="event-text">${data[i].user.views} viewers</div><div class="event-text">${time}</div></a>`
                 upcomingIcon.options.html = `<div class="upcomingIcon marker-icon"><img id="custom-div-icon" class="custom-div-upcoming-icon" src= "image/${data[i].user.icon}"></div>`
                 marker = L.marker([data[i].latitude,data[i].longitude], {icon: upcomingIcon}).bindPopup(popupContent,{closeButton:false})
             }
