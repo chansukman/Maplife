@@ -18,8 +18,23 @@ Profile page:
 
 <img width="1432" alt="image" src="https://user-images.githubusercontent.com/62546665/205975893-3da1b301-4d96-4846-ac0e-7717ca3adc40.png">
 
+Follow function:
+
+<img width="864" alt="image" src="https://user-images.githubusercontent.com/62546665/205977197-7262473a-4fa6-431e-a303-dfcd9ad7e360.png">
+
+Subscription page:
+
+<img width="1437" alt="image" src="https://user-images.githubusercontent.com/62546665/205977362-ada0cc37-f0c8-41e1-b859-516d13a2a776.png">
+<img width="137" alt="image" src="https://user-images.githubusercontent.com/62546665/205977516-ea732a01-515d-4fc4-9440-4af2cdc527c3.png">
+<img width="147" alt="image" src="https://user-images.githubusercontent.com/62546665/205977459-85209de0-4d8e-453d-84fc-a8c751d80609.png">
+
+
 Setting page:
 
 <img width="1437" alt="image" src="https://user-images.githubusercontent.com/62546665/205976014-c02235b2-511a-497b-b1bc-fc55c4059203.png">
 <img width="1438" alt="image" src="https://user-images.githubusercontent.com/62546665/205976108-310ed5ba-74ce-4eb8-956e-a6170dfc4ab3.png">
+
+Search function:
+<img width="1437" alt="image" src="https://user-images.githubusercontent.com/62546665/205976934-936bb0eb-c82d-4fa5-8a3c-26eb4e2eeb6d.png">
+
 
