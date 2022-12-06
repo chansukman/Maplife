@@ -19,8 +19,21 @@ public class EventMVConfig implements WebMvcConfigurer {
         String uploadPath = uploadDir.toFile().getAbsolutePath();
 
         if (dirName.startsWith("../")) dirName = dirName.replace("../", "");
+        
+        String osName=System.getProperty("os.name");
+        //如果是windows
+        if (osName.toLowerCase().startsWith("win")){
+            registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ uploadPath + "/");
 
-        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ uploadPath + "/");
+        }else {
+            //linux或者mac
+            // registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ uploadPath + "/");
+            System.out.println("event!!!!!"+uploadPath);
+            System.out.println(uploadDir);
+            registry.addResourceHandler(uploadPath+"/**")
+                    .addResourceLocations("file:/"+ uploadPath + "/");
+        }
+        // registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ uploadPath + "/");
     }
 
 }

@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         exposeDirectory("image", registry);
@@ -20,6 +21,27 @@ public class WebMvcConfig implements WebMvcConfigurer {
         String realUploadPath="\\src\\main\\resources\\static\\image";
         uploadPath = uploadPath.replace("image", realUploadPath);
         System.out.println(uploadPath);
-        registry.addResourceHandler("/image/**").addResourceLocations("file:/"+ uploadPath + "/");
+
+        String osName=System.getProperty("os.name");
+        //if windows
+        if (osName.toLowerCase().startsWith("win")){
+            registry.addResourceHandler("/image/**")
+                    .addResourceLocations("file:/"+ uploadPath + "/");
+                    System.out.println("windows");
+        }else {
+            //if linux
+            registry.addResourceHandler(uploadPath+"/**")
+                    .addResourceLocations("file:/"+ uploadPath + "/");
+        }
+
+
+
+
+
+        // registry.addResourceHandler("/image/**").addResourceLocations("file:/"+ uploadPath + "/");
     }
 }
+
+
+
+
