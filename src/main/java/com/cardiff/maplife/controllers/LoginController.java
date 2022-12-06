@@ -32,6 +32,7 @@ public class LoginController {
     public ResponseEntity<User> getUser() {
 
         User gotUser = userService.findUserByUsername(userService.getAuthentication());
+        System.out.println(userService.getAuthentication());
         if (gotUser != null) {
 
             if(gotUser.getLastLogin()!=null)

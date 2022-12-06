@@ -47,7 +47,7 @@ public class LightWeightMockMVCUserTest {
          this.mockMvc.perform(get("/profile/shuwen")
                     .with(user("shuwen").password("123123123").roles("USER")))
             .andDo(print()).andExpect(status().isOk())
-            .andExpect(content().string(containsString("hello")));
+            .andExpect(content().string(containsString("shuwen")));
     }
 
     //Testing the settings page
