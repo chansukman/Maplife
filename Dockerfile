@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM maven as base
+FROM maven:3.8-eclipse-temurin-11-alpine as base
 WORKDIR /app
 COPY pom.xml ./
 RUN mvn dependency:resolve
@@ -11,7 +11,7 @@ COPY src ./src
 FROM base as build
 RUN mvn package
 
-FROM maven as production
+FROM maven:3.8-eclipse-temurin-11-alpine as production
 WORKDIR /maplife
 EXPOSE 8080
 COPY --from=build /app/target/*.jar /Maplife-0.0.1-SNAPSHOT.jar
